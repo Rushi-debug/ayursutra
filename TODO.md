@@ -1,0 +1,6 @@
+- [x] Create backend/models/Booking.js with schema for user, practitioner, status, etc.
+- [x] Create backend/routes/bookings.js with endpoints: POST /api/bookings (create), GET /api/bookings (get pending for practitioner), PUT /api/bookings/:id/approve, PUT /api/bookings/:id/reject
+- [x] Update backend/server.js to include bookings route
+- [x] Update frontend/src/components/UserDashBoard.jsx: Add "Book Now" button beside each module, on click POST to /api/bookings
+- [x] Update frontend/src/components/PractitionerDashboard.jsx: Add bell icon with notification count, modal for notifications with approve/reject buttons
+- [x] Test the feature by running the app

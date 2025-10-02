@@ -1,23 +1,334 @@
-body { margin: 0; font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background: linear-gradient(180deg,#f7f4ef 0%,#eef6f0 100%); }
+/* Forest Green Theme for UserDashboard and Home */
 
-/* custom modal backdrop (React-controlled) */
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Container (UserDashboard and Home) */
+.container, .app-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #F5F5F5; /* Cream background */
+  color: #2F4F4F; /* Forest green text */
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: #2F4F4F;
+  margin-bottom: 15px;
+}
+
+h1 { font-size: 2.5rem; font-weight: bold; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+h5 { font-size: 1.1rem; }
+h6 { font-size: 1rem; }
+
+/* Text */
+.text-muted {
+  color: #708090 !important; /* Gray */
+}
+
+/* Card (shared) */
+.card {
+  background-color: #FFFFFF;
+  border: 1px solid #708090;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  margin-bottom: 20px;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-body {
+  padding: 10px;
+}
+
+.card-title {
+  color: #2F4F4F;
+  font-weight: bold;
+}
+
+.card-text {
+  color: #708090;
+  font-size: 0.9rem;
+}
+
+/* Buttons (UserDashboard) */
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-primary {
+  background-color: #2F4F4F;
+  color: #F5F5F5;
+}
+
+.btn-primary:hover {
+  background-color: #1C3535;
+}
+
+.btn-outline-primary {
+  background-color: transparent;
+  border: 1px solid #2F4F4F;
+  color: #2F4F4F;
+}
+
+.btn-outline-primary:hover {
+  background-color: #8FBC8F;
+  color: #FFFFFF;
+}
+
+.btn-success {
+  background-color: #DAA520;
+  color: #FFFFFF;
+}
+
+.btn-success:hover {
+  background-color: #B8860B;
+}
+
+.btn-info {
+  background-color: #8FBC8F;
+  color: #2F4F4F;
+}
+
+.btn-info:hover {
+  background-color: #6B9B6B;
+}
+
+.btn-outline-secondary {
+  background-color: transparent;
+  border: 1px solid #708090;
+  color: #708090;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #708090;
+  color: #FFFFFF;
+}
+
+.btn-close {
+  background-color: transparent;
+  color: #2F4F4F;
+  font-size: 1rem;
+}
+
+.btn-close:hover {
+  color: #DAA520;
+}
+
+.btn-group .btn {
+  margin: 0 5px;
+}
+
+/* List Group (UserDashboard) */
+.list-group {
+  max-width: 100%;
+}
+
+.list-group-item {
+  background-color: #FFFFFF;
+  border: 1px solid #708090;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.list-group-item:hover {
+  background-color: #8FBC8F;
+}
+
+/* Star Rating (UserDashboard) */
+.star-rating {
+  color: #DAA520;
+  font-size: 1.2rem;
+}
+
+/* Modal (UserDashboard) */
 .modal-backdrop-custom {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(47, 79, 79, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+}
+
+.modal-dialog-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-card {
+  background: #FFFFFF;
+  border: 1px solid #708090;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  /* max-width: 800px; */
+  width: 700px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+/* Chat Messages (UserDashboard) */
+.chat-messages {
+  height: 400px;
+  overflow-y: auto;
+  border: 1px solid #708090;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #F5F5F5;
+}
+
+.chat-message {
+  margin-bottom: 10px;
+}
+
+.chat-message .bg-primary {
+  background-color: #2F4F4F !important;
+  color: #F5F5F5;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.chat-message .bg-light {
+  background-color: #8FBC8F !important;
+  color: #2F4F4F;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.chat-message small {
+  color: #708090;
+  font-size: 0.8rem;
+}
+
+/* Input (UserDashboard) */
+.form-control {
+  border: 1px solid #708090;
+  border-radius: 4px;
+  padding: 8px;
+  color: #2F4F4F;
+  background-color: #F5F5F5;
+}
+
+.form-control:focus {
+  border-color: #DAA520;
+  box-shadow: 0 0 5px rgba(218, 165, 32, 0.5);
+}
+
+/* Home Component Specific */
+.section {
+  min-height: 70vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(16, 24, 40, 0.45);
-  z-index: 1050;
-  padding: 16px;
+  padding: 40px;
 }
-.modal-dialog-centered { max-width: 420px; width: 100%; }
-.modal-card { background: #fff; border-radius: 12px; box-shadow: 0 10px 40px rgba(15,23,42,0.12); }
 
-/* placeholder */
-.placeholder { display:flex; align-items:center; justify-content:center; color:#6b6b6b; }
+.card {
+  max-width: 880px;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
 
-/* tweak big buttons on small screens */
-@media (max-width: 576px) {
-  .btn-lg { padding: .5rem .75rem; font-size: 1rem; }
+.animWrap {
+  width: 320px;
+  flex: 0 0 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder {
+  width: 280px;
+  height: 220px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #8FBC8F, #F5F5F5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed #708090;
+  color: #2F4F4F;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text {
+  color: #2F4F4F;
+}
+
+footer.text-muted {
+  padding: 20px 0;
+  background-color: #2F4F4F;
+  color: #F5F5F5;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2F4F4F;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1C3535;
+}
+
+/* Icons */
+.bi {
+  color: #2F4F4F;
+}
+
+.bi:hover {
+  color: #DAA520;
+}
+
+/* Badge (UserDashboard) */
+.badge.bg-danger {
+  background-color: #A52A2A !important;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .card {
+    flex-direction: column;
+  }
+  .animWrap {
+    width: 100%;
+  }
 }

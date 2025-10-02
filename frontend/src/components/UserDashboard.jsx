@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-
 const API_BASE = 'http://localhost:5000';
 
 function StarRating({ rating }) {
@@ -7,7 +6,7 @@ function StarRating({ rating }) {
   const halfStar = rating - fullStars >= 0.5;
   const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
   return (
-    <span>
+    <span className="star-rating">
       {'★'.repeat(fullStars)}
       {halfStar && '☆'}
       {'☆'.repeat(emptyStars)}
@@ -29,7 +28,6 @@ export default function UserDashboard({ user }) {
   const [activeSection, setActiveSection] = useState('modules');
 
   useEffect(() => {
-    console.log('User prop:', user); // Debug
     if (user.lastLocation) {
       fetchModules(user.lastLocation.latitude, user.lastLocation.longitude);
     }
@@ -39,7 +37,7 @@ export default function UserDashboard({ user }) {
 
   useEffect(() => {
     if (!showChatModal || !chattingWith) return;
-    console.log('Polling for messages with:', chattingWith); // Debug
+    console.log('Polling for messages with:', chattingWith);
     const interval = setInterval(async () => {
       try {
         const token = localStorage.getItem('token');
@@ -54,14 +52,13 @@ export default function UserDashboard({ user }) {
         console.log('Polled messages:', data);
         if (data.ok) {
           setChatMessages(data.messages);
-          console.log('Set chatMessages (poll):', data.messages); // Debug
         } else {
           console.error('Failed to poll messages:', data.message, data.error);
         }
       } catch (err) {
         console.error('Poll messages error:', err);
       }
-    }, 5000); // Poll every 5 seconds
+    }, 5000);
     return () => clearInterval(interval);
   }, [showChatModal, chattingWith]);
 
@@ -69,12 +66,11 @@ export default function UserDashboard({ user }) {
     try {
       const res = await fetch(`${API_BASE}/api/practitioners/practitioner-modules?lat=${lat}&lng=${lng}`);
       const data = await res.json();
-      console.log('Modules response:', data); // Debug
       if (data.ok) {
         setModules(data.modules);
       }
     } catch (err) {
-      console.error('Error fetching modules:', err);
+      console.error('Error fetching modules', err);
     } finally {
       setLoading(false);
     }
@@ -83,20 +79,15 @@ export default function UserDashboard({ user }) {
   const fetchBookings = async () => {
     try {
       const token = localStorage.getItem('token');
-      if (!token) {
-        console.error('No token found in localStorage for bookings');
-        return;
-      }
       const res = await fetch(`${API_BASE}/api/bookings/user`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
-      console.log('Bookings response:', data); // Debug
       if (data.ok) {
         setBookings(data.bookings);
       }
     } catch (err) {
-      console.error('Error fetching bookings:', err);
+      console.error('Error fetching bookings', err);
     } finally {
       setBookingsLoading(false);
     }
@@ -113,10 +104,9 @@ export default function UserDashboard({ user }) {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
-      console.log('Chat practitioners response:', data); // Debug
+      console.log('Chat practitioners response:', data);
       if (data.ok) {
         setChatPractitioners(data.practitioners);
-        console.log('Set chatPractitioners:', data.practitioners); // Debug
       } else {
         console.error('Failed to fetch practitioners:', data.message, data.error);
       }
@@ -134,7 +124,7 @@ export default function UserDashboard({ user }) {
   };
 
   const openChat = async (practitioner) => {
-    console.log('Opening chat with:', practitioner); // Debug
+    console.log('Opening chat with:', practitioner);
     setChattingWith(practitioner);
     setChatMessages([]);
     setNewMessage('');
@@ -143,30 +133,32 @@ export default function UserDashboard({ user }) {
       const token = localStorage.getItem('token');
       if (!token) {
         console.error('No token found in localStorage for opening chat');
+        alert('Please log in again');
         return;
       }
       const res = await fetch(`${API_BASE}/api/messages/${practitioner.practitioner._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
-      console.log('Messages response:', data); // Debug
+      console.log('Messages response:', data);
       if (data.ok) {
         setChatMessages(data.messages);
-        console.log('Set chatMessages:', data.messages); // Debug
       } else {
         console.error('Failed to fetch messages:', data.message, data.error);
+        alert('Failed to load messages');
       }
       const markReadRes = await fetch(`${API_BASE}/api/messages/mark-read/${practitioner.practitioner._id}`, {
         method: 'PUT',
         headers: { Authorization: `Bearer ${token}` },
       });
       const markReadData = await markReadRes.json();
-      console.log('Mark read response:', markReadData); // Debug
+      console.log('Mark read response:', markReadData);
       if (markReadData.ok) {
         setChatPractitioners(chatPractitioners.map(p => p.practitioner._id === practitioner.practitioner._id ? { ...p, unreadCount: 0 } : p));
       }
     } catch (err) {
       console.error('Open chat error:', err);
+      alert('Error opening chat');
     }
   };
 
@@ -174,34 +166,28 @@ export default function UserDashboard({ user }) {
     if (!newMessage.trim()) return;
     try {
       const token = localStorage.getItem('token');
-      if (!token) {
-        console.error('No token found in localStorage for sending message');
-        return;
-      }
-      const payload = {
-        receiver: chattingWith.practitioner._id,
-        receiverRole: 'practitioner',
-        message: newMessage,
-      };
-      console.log('Sending message:', payload); // Debug
       const res = await fetch(`${API_BASE}/api/messages`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          receiver: chattingWith.practitioner._id,
+          receiverRole: 'practitioner',
+          message: newMessage,
+        }),
       });
       const data = await res.json();
-      console.log('Send message response:', data); // Debug
       if (data.ok) {
         setChatMessages([...chatMessages, data.message]);
         setNewMessage('');
       } else {
-        console.error('Failed to send message:', data.message, data.error);
+        alert('Failed to send message');
       }
     } catch (err) {
-      console.error('Send message error:', err);
+      console.error('Send message error', err);
+      alert('Error sending message');
     }
   };
 
@@ -258,13 +244,10 @@ export default function UserDashboard({ user }) {
             <div style={{ maxHeight: '60vh', overflowY: 'auto' }}>
               <div className="list-group">
                 {modules.map(module => (
-                  <div
-                    key={module.id}
-                    className="list-group-item mb-2"
+                  <div key={module.id} className="list-group-item mb-2"
                     onClick={() => handleExpand(module.id)}
                     onMouseEnter={() => handleExpand(module.id)}
                     onMouseLeave={() => expandedModuleId === module.id && handleCollapse()}
-                    style={{ cursor: 'pointer' }}
                   >
                     <div className="d-flex justify-content-between align-items-center">
                       <div>
@@ -285,20 +268,20 @@ export default function UserDashboard({ user }) {
                                 method: 'POST',
                                 headers: {
                                   'Content-Type': 'application/json',
-                                  Authorization: `Bearer ${token}`,
+                                  'Authorization': `Bearer ${token}`
                                 },
-                                body: JSON.stringify({ practitionerId: module.id }),
+                                body: JSON.stringify({ practitionerId: module.id })
                               });
                               const data = await res.json();
                               if (data.ok) {
                                 alert('Booking request sent successfully');
-                                fetchBookings(); // Refresh bookings
+                                fetchChatPractitioners(); // Refresh chat practitioners
                               } else {
                                 alert('Failed to send booking request: ' + data.error);
                               }
                             } catch (err) {
                               alert('Error sending booking request');
-                              console.error('Error sending booking request:', err);
+                              console.error(err);
                             }
                           }}
                         >
@@ -317,13 +300,7 @@ export default function UserDashboard({ user }) {
                           </button>
                         )}
                         {expandedModuleId === module.id && (
-                          <button
-                            className="btn btn-sm btn-outline-secondary"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleCollapse();
-                            }}
-                          >
+                          <button className="btn btn-sm btn-outline-secondary" onClick={(e) => { e.stopPropagation(); handleCollapse(); }}>
                             Escape
                           </button>
                         )}
@@ -396,11 +373,7 @@ export default function UserDashboard({ user }) {
             <div className="row">
               {chatPractitioners.map((practitioner) => (
                 <div key={practitioner.practitioner._id} className="col-md-4 mb-3">
-                  <div
-                    className="card"
-                    onClick={() => openChat(practitioner)}
-                    style={{ cursor: 'pointer' }}
-                  >
+                  <div className="card" onClick={() => openChat(practitioner)}>
                     <div className="card-body">
                       <div className="d-flex align-items-center">
                         <div className="me-3">
@@ -425,42 +398,21 @@ export default function UserDashboard({ user }) {
       {showChatModal && chattingWith && (
         <div className="modal-backdrop-custom">
           <div className="modal-dialog-centered">
-            <div className="modal-card p-3" style={{ maxWidth: '500px', height: '600px' }}>
+            <div className="modal-card">
               <div className="d-flex justify-content-between align-items-center mb-2">
                 <h5 className="m-0">Chat with {chattingWith.practitioner.name || 'Unknown'}</h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={() => setShowChatModal(false)}
-                ></button>
+                <button type="button" className="btn-close" onClick={() => setShowChatModal(false)}></button>
               </div>
-              <div
-                style={{
-                  height: '400px',
-                  overflowY: 'auto',
-                  border: '1px solid #ccc',
-                  padding: '10px',
-                  marginBottom: '10px',
-                }}
-              >
+              <div className="chat-messages">
                 {chatMessages.length === 0 ? (
                   <p>No messages yet.</p>
                 ) : (
                   chatMessages.map((msg) => (
-                    <div
-                      key={msg._id}
-                      className={`mb-2 ${msg.senderRole === 'user' ? 'text-end' : ''}`}
-                    >
-                      <div
-                        className={`d-inline-block p-2 rounded ${
-                          msg.senderRole === 'user' ? 'bg-primary text-white' : 'bg-light'
-                        }`}
-                      >
+                    <div key={msg._id} className={`chat-message ${msg.senderRole === 'user' ? 'text-end' : ''}`}>
+                      <div className={`d-inline-block p-2 rounded ${msg.senderRole === 'user' ? 'bg-primary text-white' : 'bg-light'}`}>
                         {msg.message}
                       </div>
-                      <small className="d-block text-muted">
-                        {new Date(msg.timestamp).toLocaleString()}
-                      </small>
+                      <small className="d-block text-muted">{new Date(msg.timestamp).toLocaleString()}</small>
                     </div>
                   ))
                 )}

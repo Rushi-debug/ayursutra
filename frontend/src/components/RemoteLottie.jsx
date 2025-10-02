@@ -1,21 +1,43 @@
-import React, { useEffect, useState } from 'react'
-import Lottie from 'lottie-react'
+import React, { useEffect, useRef } from 'react';
+import lottie from 'lottie-web';
 
-export default function RemoteLottie({ url, style }) {
-  const [data, setData] = useState(null)
+const RemoteLottie = ({ url }) => {
+  const containerRef = useRef(null);
+  const [error, setError] = React.useState(null);
 
   useEffect(() => {
-    let cancelled = false
-    setData(null)
-    fetch(url)
-      .then(r => r.json())
-      .then(json => {
-        if (!cancelled) setData(json)
-      })
-      .catch(err => console.error('Failed to load Lottie JSON', err))
-    return () => (cancelled = true)
-  }, [url])
+    let animation;
+    if (containerRef.current) {
+      try {
+        animation = lottie.loadAnimation({
+          container: containerRef.current,
+          renderer: 'svg',
+          loop: true,
+          autoplay: true,
+          path: url,
+        });
+        animation.addEventListener('data_failed', () => {
+          setError('Failed to load animation');
+        });
+      } catch (err) {
+        setError('Error loading animation');
+        console.error('Lottie error:', err);
+      }
+    }
+    return () => {
+      if (animation) animation.destroy();
+    };
+  }, [url]);
 
-  if (!data) return <div className="placeholder">Loading…</div>
-  return <Lottie animationData={data} loop style={style || { width: 300, height: 240 }} />
-}
+  return (
+    <div className="animWrap">
+      {error ? (
+        <div className="placeholder">Animation Failed: {error}</div>
+      ) : (
+        <div ref={containerRef} style={{ width: '100%', height: '100%' }} />
+      )}
+    </div>
+  );
+};
+
+export default RemoteLottie;

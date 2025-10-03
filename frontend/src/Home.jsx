@@ -45,18 +45,19 @@ export default function Home() {
   }, []);
 
   const publicAnimations = {
-    massage1: 'https://assets7.lottiefiles.com/packages/lf20_7fCbvNSmFD.json',
-    massage2: 'https://assets5.lottiefiles.com/packages/lf20_uNwwkb.json',
-    calmBreath: 'https://assets.lottiefiles.com/packages/lf20_UJNc2t.json',
-    healing: 'https://assets2.lottiefiles.com/packages/lf20_i9mxcD.json',
+    k1: 'https://lottie.host/d67ab91b-fb39-4ca8-a57c-b4fec709b85c/4ZdxaL6MAh.json',
+    k5: 'https://assets7.lottiefiles.com/packages/lf20_7fCbvNSmFD.json',
+    k3: 'https://lottie.host/d3323c52-e96c-4f83-8b8b-851949a31307/Dzw5aJxulk.json',
+    k4: 'https://assets2.lottiefiles.com/packages/lf20_i9mxcD.json',
+    k2: 'https://lottie.host/27234d60-7832-4a8b-aa9f-b0c4ca342208/CYvJ0F60Sh.json',
   };
 
   const steps = [
-    { id: 'vamana', title: 'Vamana — Therapeutic Emesis', desc: 'A cleansing therapy to remove excess Kapha and toxins from the upper digestive tract.', anim: publicAnimations.calmBreath },
-    { id: 'virechana', title: 'Virechana — Purgation Therapy', desc: 'A medicated purgation to cleanse Pitta-related toxins and cleanse the intestinal tract.', anim: publicAnimations.healing },
-    { id: 'basti', title: 'Basti — Medicated Enema', desc: 'A therapeutic enema using herbal oils and decoctions to balance Vata and remove deep-seated toxins.', anim: publicAnimations.massage1 },
-    { id: 'nasya', title: 'Nasya — Nasal Therapy', desc: 'Administration of herbal oils or powders through the nostrils to clear head-related channels and balance doshas.', anim: publicAnimations.massage2 },
-    { id: 'raktamokshana', title: 'Raktamokshana — Bloodletting / Purification', desc: 'An ancient cleansing technique to remove impure blood and balance certain conditions.', anim: publicAnimations.healing },
+    { id: 'vamana', title: 'Vamana — Therapeutic Emesis', desc: 'A cleansing therapy to remove excess Kapha and toxins from the upper digestive tract.', anim: publicAnimations.k1 },
+    { id: 'virechana', title: 'Virechana — Purgation Therapy', desc: 'A medicated purgation to cleanse Pitta-related toxins and cleanse the intestinal tract.', anim: publicAnimations.k2 },
+    { id: 'basti', title: 'Basti — Medicated Enema', desc: 'A therapeutic enema using herbal oils and decoctions to balance Vata and remove deep-seated toxins.', anim: publicAnimations.k3 },
+    { id: 'nasya', title: 'Nasya — Nasal Therapy', desc: 'Administration of herbal oils or powders through the nostrils to clear head-related channels and balance doshas.', anim: publicAnimations.k4 },
+    { id: 'raktamokshana', title: 'Raktamokshana — Bloodletting / Purification', desc: 'An ancient cleansing technique to remove impure blood and balance certain conditions.', anim: publicAnimations.k5 },
   ];
 
   return (
